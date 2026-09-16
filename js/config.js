@@ -7,9 +7,9 @@
    sini.
    ============================================================ */
 window.EXAM_CONFIG = {
-  backendUrl: "https://script.google.com/macros/s/AKfycbzJSPIIvnL0SzsYrcuzezyAVBBTbf8VaY_d9_EC-XqtRsw5PJFHajny5ExnfAS1V2-TIw/exec",
+  backendUrl: "https://script.google.com/macros/s/AKfycbxEhIxZ-1Gtdl7Cum9B8rPn8i6QDH7XY1N0HWbsbdbzeWbtIAV_AzdUJ8-J_1fG8yIX1w/exec",
 
-  examTitle: "Ulangan Fisika — Oscillations, Ideal Gases & Thermal Properties",
+  examTitle: "QUIZ",
 
   // Berapa kali pelanggaran (total, semua jenis) sebelum ujian
   // seorang siswa otomatis dikumpulkan.
