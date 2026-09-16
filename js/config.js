@@ -7,7 +7,7 @@
    sini.
    ============================================================ */
 window.EXAM_CONFIG = {
-  backendUrl: "https://script.google.com/macros/s/AKfycbxEhIxZ-1Gtdl7Cum9B8rPn8i6QDH7XY1N0HWbsbdbzeWbtIAV_AzdUJ8-J_1fG8yIX1w/exec",
+  backendUrl: "https://script.google.com/macros/s/AKfycbzMfte7piRjuVGDihMCN4czu966vrMGoBhjgJTZnvI2HdplpHqFALKvnQhYU-5eG9hU0A/exec",
 
   examTitle: "QUIZ",
 
