@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Ulangan Fisika — Masuk Ujian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ============ 1. LOGIN ============ -->
+<section class="screen" id="screen-login">
+  <div class="card">
+    <span class="badge">Ujian Fisika</span>
+    <h1 style="margin-top:10px;">Masuk ke Sesi Ujian</h1>
+    <p class="subtitle">Isi data dirimu dan kode sesi yang diberikan guru.</p>
+
+    <div class="error-box" id="login-error" hidden></div>
+
+    <form id="login-form">
+      <div class="field">
+        <label for="in-name">Nama lengkap</label>
+        <input type="text" id="in-name" autocomplete="name" required />
+      </div>
+      <div class="field">
+        <label for="in-class">Kelas</label>
+        <input type="text" id="in-class" placeholder="mis. XI IPA 2" required />
+      </div>
+      <div class="field">
+        <label for="in-code">Kode sesi dari guru</label>
+        <input type="text" id="in-code" placeholder="mis. 7QK4RT" style="text-transform:uppercase;" required />
+      </div>
+      <button type="submit" class="btn btn-primary" id="login-submit">Masuk</button>
+    </form>
+  </div>
+</section>
+
+<!-- ============ 2. RULES / START ============ -->
+<section class="screen" id="screen-rules" hidden>
+  <div class="card">
+    <span class="badge badge--warn">Sebelum mulai</span>
+    <h1 style="margin-top:10px;">Aturan Ujian</h1>
+    <p class="subtitle" id="rules-attempt-info">Bacalah sebelum menekan tombol mulai.</p>
+
+    <ul class="rules-list">
+      <li><span class="dot"></span>Ujian akan dibuka dalam mode layar penuh. Jangan keluar dari mode ini sampai selesai.</li>
+      <li><span class="dot"></span>Jangan berpindah tab, aplikasi lain (termasuk Alt+Tab), atau meminimalkan jendela.</li>
+      <li><span class="dot"></span><strong>Meninggalkan tampilan ujian (keluar layar penuh ATAU pindah tab/aplikasi) diperbolehkan maksimal 1 kali sebagai peringatan.</strong> Kejadian ke-2 langsung menghentikan ujianmu dan mengunci aksesmu — gurumu harus membuka kembali secara manual sebelum kamu bisa mencoba lagi.</li>
+      <li><span class="dot"></span>Klik kanan, menyalin teks, dan sebagian pintasan keyboard dinonaktifkan.</li>
+      <li><span class="dot"></span>Semua pelanggaran di atas tercatat dan terlihat oleh gurumu secara langsung.</li>
+      <li><span class="dot"></span>Ujian terdiri dari 12 soal pilihan ganda dengan batas waktu.</li>
+    </ul>
+
+    <button type="button" class="btn btn-primary" id="start-exam-btn">Mulai Ujian (Layar Penuh)</button>
+
+    <div class="disclosure">
+      Catatan jujur: Alt+Tab / berpindah aplikasi adalah pintasan level sistem operasi — tidak ada halaman web yang bisa benar-benar mencegahnya, dan tombol Esc selalu bisa keluar dari layar penuh (dikontrol browser, bukan situs ini). Yang dilakukan sistem ini adalah mendeteksi begitu itu terjadi dan menindaklanjuti dengan tegas (peringatan lalu penguncian akses), bukan mencegahnya terjadi sama sekali. Begitu juga, tidak ada situs web yang bisa mencegah screenshot dari perangkat lain (HP, kamera).
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. EXAM ============ -->
+<section id="screen-exam" class="exam-shell" hidden>
+  <div class="exam-topbar">
+    <div class="who">Peserta: <strong id="who-name">-</strong> <span class="badge" id="attempt-badge" style="margin-left:6px;"></span><br /><span id="exam-title-tag" style="font-size:0.78rem;"></span></div>
+    <div class="timer" id="timer">--:--</div>
+  </div>
+  <div class="exam-main">
+    <div class="exam-content">
+      <div class="q-progress" id="q-progress"></div>
+      <div class="q-card" id="q-card"></div>
+    </div>
+  </div>
+</section>
+
+<div class="violation-toast" id="violation-toast"></div>
+
+<div class="fs-overlay" id="fs-overlay" hidden>
+  <div class="box">
+    <h2 id="leave-overlay-title">Peringatan</h2>
+    <p id="leave-overlay-body"></p>
+    <button type="button" class="btn btn-primary" id="fs-resume-btn">Saya Mengerti, Lanjutkan</button>
+  </div>
+</div>
+
+<!-- ============ 4. RESULT ============ -->
+<section class="screen" id="screen-result" hidden>
+  <div class="card">
+    <span class="badge badge--good">Selesai</span>
+    <h1 style="margin-top:10px;">Ujian Terkumpul</h1>
+    <p class="subtitle" id="result-name">-</p>
+
+    <div class="notice-box" id="result-auto-note" hidden></div>
+
+    <div class="score-ring"><span id="score-ring-text">-/-</span></div>
+
+    <div class="summary-grid">
+      <div class="stat"><div class="n" id="stat-percent">-</div><div class="l">Skor</div></div>
+      <div class="stat"><div class="n" id="stat-violations">-</div><div class="l">Pelanggaran tercatat</div></div>
+    </div>
+
+    <div id="topic-breakdown"></div>
+
+    <p class="notice-box" id="attempt-result-note" hidden></p>
+    <div class="error-box" id="retry-error" hidden></div>
+    <button type="button" class="btn btn-secondary btn-block" id="retry-btn" hidden style="margin-bottom:10px;"></button>
+
+    <p class="small-note" style="text-align:center;margin-top:8px;">Hasil telah dikirim ke gurumu. Kamu boleh menutup halaman ini, atau coba lagi kalau tombol di atas tersedia.</p>
+  </div>
+</section>
+
+<!-- ============ 5. KICKED (2x meninggalkan ujian) ============ -->
+<section class="screen" id="screen-kicked" hidden>
+  <div class="card">
+    <span class="badge badge--danger">Ujian Dihentikan</span>
+    <h1 style="margin-top:10px;">Kamu Dikeluarkan dari Ujian</h1>
+    <p class="subtitle">Kamu meninggalkan tampilan ujian (layar penuh/tab/aplikasi lain) 2 kali dalam percobaan ini, sehingga ujian dihentikan otomatis.</p>
+
+    <div class="error-box">
+      Akses ujianmu sekarang <strong>dikunci</strong>. Kamu tidak bisa masuk lagi sampai gurumu membuka akses tersebut secara manual di Panel Guru — beri tahu gurumu sekarang.
+    </div>
+
+    <div class="summary-grid">
+      <div class="stat"><div class="n" id="kicked-score">-</div><div class="l">Skor percobaan ini</div></div>
+    </div>
+
+    <div class="error-box" id="kicked-error" hidden></div>
+    <button type="button" class="btn btn-secondary btn-block" id="kicked-retry-btn">Coba Masuk Lagi</button>
+    <p class="small-note" style="text-align:center;margin-top:10px;">Tombol ini hanya berhasil setelah gurumu membuka akses kembali.</p>
+  </div>
+</section>
+
+<script src="js/config.js"></script>
+<script src="js/questions.js"></script>
+<script src="js/exam.js"></script>
+</body>
+</html>

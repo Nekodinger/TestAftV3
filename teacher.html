@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Panel Guru — Ujian Fisika</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<section class="screen" id="t-screen-login">
+  <div class="card">
+    <span class="badge">Panel Guru</span>
+    <h1 style="margin-top:10px;">Masuk sebagai Guru</h1>
+    <p class="subtitle">Masukkan kode kontrol guru (diatur di apps-script/Code.gs).</p>
+
+    <div class="error-box" id="t-login-error" hidden></div>
+
+    <form id="t-login-form">
+      <div class="field">
+        <label for="t-in-code">Kode kontrol guru</label>
+        <input type="password" id="t-in-code" autocomplete="off" required />
+      </div>
+      <button type="submit" class="btn btn-primary" id="t-login-submit">Masuk Panel Guru</button>
+    </form>
+  </div>
+</section>
+
+<!-- ============ PANEL ============ -->
+<section id="t-screen-panel" hidden>
+  <div class="teacher-shell">
+    <div class="teacher-header">
+      <h1>Panel Guru — Ujian Fisika</h1>
+      <button type="button" class="btn btn-secondary" id="t-logout-btn">Keluar</button>
+    </div>
+
+    <div class="grid-2">
+      <!-- session control -->
+      <div>
+        <div class="panel" id="panel-no-session">
+          <h2>Mulai Sesi Baru</h2>
+          <form id="start-session-form">
+            <div class="field">
+              <label for="start-title">Judul ujian</label>
+              <input type="text" id="start-title" value="Ulangan Fisika — Oscillations, Ideal Gases &amp; Thermal Properties" />
+            </div>
+            <div class="field">
+              <label for="start-duration">Durasi ujian (menit)</label>
+              <input type="number" id="start-duration" value="25" min="5" max="180" />
+            </div>
+            <div class="field">
+              <label for="start-max-attempts">Maksimal percobaan per siswa</label>
+              <input type="number" id="start-max-attempts" value="2" min="1" max="5" />
+              <p class="hint">Nilai TERTINGGI di antara semua percobaan siswa yang akan ditampilkan sebagai skor akhirnya.</p>
+            </div>
+            <button type="submit" class="btn btn-primary" id="start-session-btn">Mulai Sesi Baru</button>
+          </form>
+        </div>
+
+        <div class="panel" id="panel-active-session" hidden>
+          <h2>Sesi Aktif</h2>
+          <div class="code-display" id="active-code">------</div>
+          <p style="text-align:center;color:var(--muted);font-size:0.85rem;margin:0 0 16px;">
+            Bagikan kode ini ke siswa. Judul: <strong id="active-title"></strong> &middot; Durasi: <span id="active-duration"></span> &middot; Maks. percobaan: <span id="active-max-attempts"></span>
+          </p>
+          <button type="button" class="btn btn-danger btn-block" id="end-session-btn">Akhiri Sesi</button>
+        </div>
+
+        <div class="panel">
+          <h2>Ringkasan</h2>
+          <div class="summary-grid">
+            <div class="stat"><div class="n" id="stat-joined">0</div><div class="l">Bergabung</div></div>
+            <div class="stat"><div class="n" id="stat-submitted">0</div><div class="l">Selesai</div></div>
+            <div class="stat"><div class="n" id="stat-avg">-</div><div class="l">Rata-rata skor</div></div>
+          </div>
+          <p class="small-note">Data diperbarui otomatis setiap beberapa detik.</p>
+        </div>
+      </div>
+
+      <!-- roster -->
+      <div>
+        <div class="panel">
+          <h2>Aktivitas Siswa</h2>
+          <div style="overflow-x:auto;">
+            <table class="roster">
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>Kelas</th>
+                  <th>Status</th>
+                  <th>Percobaan</th>
+                  <th>Pelanggaran</th>
+                  <th>Skor tertinggi</th>
+                  <th>Terakhir aktif</th>
+                  <th>Bergabung</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="roster-body">
+                <tr><td colspan="9" class="empty-row">Belum ada sesi aktif.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="small-note">"Pelanggaran" menjumlahkan semua jenis pada percobaan siswa yang sedang/terakhir berjalan — termasuk <strong>leftExam</strong> (keluar layar penuh / pindah tab / Alt+Tab, digabung jadi satu hitungan), upaya menyalin/klik kanan, upaya membuka DevTools, dan tombol Print Screen. Siswa yang meninggalkan tampilan ujian 2 kali otomatis <strong>terkunci</strong> — gunakan tombol "Buka Akses" di kolom Aksi untuk mengizinkannya mencoba lagi. "Skor tertinggi" adalah nilai terbaik di antara seluruh percobaan siswa tersebut. Rincian per siswa tidak dijamin lengkap — lihat README.md untuk batas kemampuan sistem ini.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="js/config.js"></script>
+<script src="js/teacher.js"></script>
+</body>
+</html>
